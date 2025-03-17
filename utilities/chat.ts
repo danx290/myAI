@@ -101,8 +101,8 @@ export async function searchForChunksUsingEmbedding(
 
     return matches.map((match: any) =>
       chunkSchema.parse({
-        pre_context: match.metadata?.pre_context ?? "",
-        post_context: match.metadata?.post_context ?? "",
+        pre_context: match.metadata?.colors ?? "",
+        post_context: match.metadata?.seasonal_colors ?? "",
         source_description: match.metadata?.source_description ?? "",
         order: match.metadata?.order ?? 0,
         colors: match.metadata?.colors ?? [],
@@ -138,6 +138,7 @@ export function aggregateSources(chunks: Chunk[]): Source[] {
   return Array.from(sourceMap.values());
 }
 
+
 export function sortChunksInSourceByOrder(source: Source): Source {
   source.chunks.sort((a, b) => a.order - b.order);
   return source;
@@ -156,7 +157,7 @@ export function buildContextFromOrderedChunks(
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
     context += chunk.pre_context;
-    context += " " + chunk.text + ` [${citationNumber}] `;
+    context += " " + chunk.text;
     if (
       i === chunks.length - 1 ||
       chunk.post_context !== chunks[i + 1].pre_context
@@ -183,6 +184,7 @@ export function getContextFromSource(
     </excerpt>
   `;
 }
+
 
 export function getContextFromSources(sources: Source[]): string {
   return sources

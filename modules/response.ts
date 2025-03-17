@@ -177,10 +177,9 @@ export class ResponseModule {
             status: `Read over ${sources.length} documents`,
             icon: "documents",
           });
+          
           const citations: Citation[] = await getCitationsFromChunks(chunks);
-          console.log(citations);
           const contextFromSources = await getContextFromSources(sources);
-          //console.log(contextFromSources);
           const systemPrompt =
             RESPOND_TO_QUESTION_SYSTEM_PROMPT(contextFromSources);
           queueIndicator({
