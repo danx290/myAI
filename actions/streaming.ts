@@ -32,7 +32,7 @@ export async function handleOpenAIStream({
   model_name,
   systemPrompt,
   citations,
-  temperature,
+  temperature
 }: QueueAssistantResponseParams) {
   let client: OpenAI = providers.openai;
   if (providerName === "fireworks") {

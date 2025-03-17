@@ -24,12 +24,14 @@ export function CitationCircle({
     }
   };
 
-  const hasSourceUrl = isValidUrl(citation.source_url);
-  const hasSourceDescription = citation.source_description.trim() !== "";
+  const hasSourceUrl = citation.source_url && isValidUrl(citation.source_url);
+  const hasSourceDescription = citation.source_description?.trim() !== "";
 
-  // Format image name: lowercase + no spaces
-  const imageName = citation.source_description.toLowerCase().replace(/\s+/g, "");  
-  const imagePath = `/${imageName}.png`; // Correct path for public folder images
+  // Sanitize image name: lowercase + no spaces + remove special characters
+  const safeImageName = citation.source_description
+    ? citation.source_description.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "")
+    : "default";
+  const imagePath = `/${safeImageName}.png`;
 
   return (
     <Tooltip.Provider delayDuration={100}>
@@ -46,8 +48,8 @@ export function CitationCircle({
             className="bg-white p-3 rounded-md shadow-lg border border-gray-300 max-w-xs"
             style={{
               pointerEvents: "auto",
-              overflow: "visible", // Prevents clipping
-              zIndex: 50, // Ensures it appears above other elements
+              overflow: "visible",
+              zIndex: 50,
             }}
           >
             <div className="text-sm text-gray-800 text-center font-semibold mb-2">
@@ -60,16 +62,19 @@ export function CitationCircle({
                 rel="noopener noreferrer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setOpen(false);
+                  setTimeout(() => setOpen(false), 100); // Prevent state issues
                 }}
               >
-                <Image
-                  src={imagePath}
-                  alt={citation.source_description}
-                  width={200}
-                  height={150}
-                  className="rounded-md shadow-sm"
-                />
+                {safeImageName && (
+                  <Image
+                    src={imagePath}
+                    alt={citation.source_description || "Source"}
+                    width={200}
+                    height={150}
+                    className="rounded-md shadow-sm"
+                    onError={(e) => (e.currentTarget.src = "/fallback.png")} // Handle missing images
+                  />
+                )}
               </a>
             )}
           </Tooltip.Content>
