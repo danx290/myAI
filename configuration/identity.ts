@@ -1,5 +1,5 @@
-export const OWNER_NAME: string = `Daniel`;
-export const OWNER_DESCRIPTION: string = `CS Student`;
+export const OWNER_NAME: string = `Yeti`;
+export const OWNER_DESCRIPTION: string = `Corporation Owner`;
 
 export const AI_NAME: string = `Yeti`;
 export const AI_TONE: string = `Friendly`;
