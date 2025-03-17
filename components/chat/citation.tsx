@@ -2,17 +2,13 @@
 
 import { useState } from "react";
 import { Citation } from "@/types";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import Link from "next/link";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import Image from "next/image";
 import { EMPTY_CITATION_MESSAGE } from "@/configuration/ui";
 
 export function CitationCircle({
   number,
-  citation,
+  citation
 }: {
   number: number;
   citation: Citation;
@@ -27,36 +23,58 @@ export function CitationCircle({
       return false;
     }
   };
+
   const hasSourceUrl = isValidUrl(citation.source_url);
   const hasSourceDescription = citation.source_description.trim() !== "";
 
+  // Format image name: lowercase + no spaces
+  const imageName = citation.source_description.toLowerCase().replace(/\s+/g, "");  
+  const imagePath = `/${imageName}.png`; // Correct path for public folder images
+
   return (
-    <Tooltip open={open} onOpenChange={setOpen}>
-      <TooltipTrigger>
-        <div
-          className="bg-gray-50 rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
-          onClick={() => setOpen(true)}
-        >
-          <span>{number}</span>
-        </div>
-      </TooltipTrigger>
-      <TooltipContent>
-        <div className="bg-white p-2 rounded-md shadow-sm flex flex-col justify-center border-[1px] border-gray-200">
-          <p>
+    <Tooltip.Provider delayDuration={100}>
+      <Tooltip.Root open={open} onOpenChange={setOpen}>
+        <Tooltip.Trigger asChild>
+          <button className="bg-gray-50 rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 transition-all">
+            {number}
+          </button>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content
+            side="top"
+            align="center"
+            className="bg-white p-3 rounded-md shadow-lg border border-gray-300 max-w-xs"
+            style={{
+              pointerEvents: "auto",
+              overflow: "visible", // Prevents clipping
+              zIndex: 50, // Ensures it appears above other elements
+            }}
+          >
+            <div className="text-sm text-gray-800 text-center font-semibold mb-2">
+              {hasSourceDescription ? citation.source_description : EMPTY_CITATION_MESSAGE}
+            </div>
             {hasSourceUrl && (
-              <Link
+              <a
                 href={citation.source_url}
                 target="_blank"
-                className="text-blue-500 hover:underline text-sm"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(false);
+                }}
               >
-                {citation.source_description}
-              </Link>
+                <Image
+                  src={imagePath}
+                  alt={citation.source_description}
+                  width={200}
+                  height={150}
+                  className="rounded-md shadow-sm"
+                />
+              </a>
             )}
-            {!hasSourceUrl && citation.source_description}
-            {!hasSourceUrl && !hasSourceDescription && EMPTY_CITATION_MESSAGE}
-          </p>
-        </div>
-      </TooltipContent>
-    </Tooltip>
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   );
 }

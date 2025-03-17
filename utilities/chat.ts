@@ -1,6 +1,6 @@
 import { HYDE_MODEL, HYDE_TEMPERATURE } from "@/configuration/models";
 import { QUESTION_RESPONSE_TOP_K } from "@/configuration/pinecone";
-import {
+import { 
   HYDE_PROMPT,
   RESPOND_TO_QUESTION_SYSTEM_PROMPT,
 } from "@/configuration/prompts";
@@ -101,12 +101,17 @@ export async function searchForChunksUsingEmbedding(
 
     return matches.map((match: any) =>
       chunkSchema.parse({
-        text: match.metadata?.text ?? "",
         pre_context: match.metadata?.pre_context ?? "",
         post_context: match.metadata?.post_context ?? "",
-        source_url: match.metadata?.source_url ?? "",
         source_description: match.metadata?.source_description ?? "",
         order: match.metadata?.order ?? 0,
+        colors: match.metadata?.colors ?? [],
+        name: match.metadata?.name ?? "",
+        rating: match.metadata?.rating ?? 0,
+        reviews: match.metadata?.reviews ?? 0,
+        seasonal_colors: match.metadata?.seasonal_colors ?? [],
+        source_url: match.metadata?.source_url ?? "",
+        text: match.metadata?.text ?? "",
       })
     );
   } catch (error) {

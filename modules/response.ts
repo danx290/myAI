@@ -1,4 +1,4 @@
-import {
+import { 
   Chat,
   Chunk,
   Source,
@@ -167,7 +167,7 @@ export class ResponseModule {
             status: "Reading through documents",
             icon: "searching",
           });
-          const chunks: Chunk[] = await searchForChunksUsingEmbedding(
+          const chunks: Chunk[] = await searchForChunksUsingEmbedding( //REMEMBER
             embedding,
             index
           );
@@ -178,7 +178,9 @@ export class ResponseModule {
             icon: "documents",
           });
           const citations: Citation[] = await getCitationsFromChunks(chunks);
+          console.log(citations);
           const contextFromSources = await getContextFromSources(sources);
+          //console.log(contextFromSources);
           const systemPrompt =
             RESPOND_TO_QUESTION_SYSTEM_PROMPT(contextFromSources);
           queueIndicator({

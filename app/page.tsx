@@ -19,8 +19,11 @@ export default function Chat() {
   return (
     <>
       <ChatHeader clearMessages={clearMessages} />
-      <div className="flex justify-center items-center h-screen">
-        <div className="flex flex-col max-w-screen-lg w-full h-full p-5">
+      <div
+        className="flex justify-center items-center h-screen bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/background.jpg')" }}
+      >
+        <div className="flex flex-col max-w-screen-lg w-full h-full p-5 bg-white bg-opacity-75 rounded-lg shadow-lg">
           <ChatMessages messages={messages} indicatorState={indicatorState} />
         </div>
       </div>

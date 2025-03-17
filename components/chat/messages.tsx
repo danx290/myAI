@@ -9,7 +9,7 @@ import { AI_NAME } from "@/configuration/identity";
 function AILogo() {
   return (
     <div className="w-9 h-9">
-      <Image src="/ai-logo.png" alt={AI_NAME} width={36} height={36} />
+      <Image src="/ai-logo.png" alt={AI_NAME} width={60} height={60} />
     </div>
   );
 }
